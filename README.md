@@ -1,2 +1,2 @@
-# object-centric_radience_fields
- This repo is the unofficial implementation of the model from paper "".
+# Object-Centric Radience Fields
+ This repo is the unofficial implementation of uORF the model from paper "Unsupervised Discovery of Object Radiance Fields".
