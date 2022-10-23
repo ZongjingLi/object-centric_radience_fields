@@ -12,6 +12,7 @@ class Projection(object):
                 near = 5, far = 16, frustum_size = (128,128,128), device = device,
                 nss_scale = 7, render_size = (64,64)):
         super().__init__()
+        # the size of render
         self.render_size   = render_size
         self.device        = device
         self.focal_ratio   = focal_ratio
