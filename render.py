@@ -16,7 +16,7 @@ class PatchDecoder(nn.Module):
 
     def forward(self,z):
         # first use the z(100) to decode entity(100) a neural field
-        # then  use the z(100) to decode transformation of 
+        # then  use the z(100) to decode the affine transformation A s + b
         return z
 
 def PatchLoss(patch,location):
