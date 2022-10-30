@@ -36,6 +36,8 @@ def train_render_field(model,train_config = train_config):
             im = sample["image"];itr += 1
 
             recon = im # calculate the model output
+            recon_loss = 0
+            comps_loss = 0
 
             # visualize the training image and output if in vis-iter
             if itr % train_parser.visualize_itr == 0:
@@ -43,7 +45,7 @@ def train_render_field(model,train_config = train_config):
                 plt.subplot(121);plt.cla();plt.imshow(im[0].permute([1,2,0]))
                 plt.subplot(122);plt.cla();plt.imshow(recon[0].permute([1,2,0]))
         
-            working_loss = 0
+            working_loss = recon_loss + comps_loss
             working_loss.backward()
             optimizer.step()
             optimizer.zero_grad()
@@ -56,4 +58,5 @@ def train_render_field(model,train_config = train_config):
 
 if __name__ == "__main__":
     # and let the training begin.
-    pass
+    model = OCRF(config)
+    train_render_field(model,train_config)
