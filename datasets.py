@@ -6,17 +6,27 @@ import numpy as np
 import os
 
 class Clevr4(Dataset):
-    def __init__(self,split = "train"):
-        super().__init__()
-        assert split in ["train","test","validate"],print("Unknown dataset split type: {}".format(split))
+    def __init__(self,split = "train",resolution = (32,32), stage=0):
+        self.path = "/content/clevr4/CLEVR_new_{}.png"
+        #self.images = sorted(glob(self.path))
+        self.img_transform = transforms.Compose(
+            [transforms.ToTensor()]
+        )
+        self.resolution = resolution
 
-    def len(self):return 1
+    def __len__(self):
+        return 10000
 
-    def __getitem__(self,index):
-        return index
+    def __getitem__(self, index):
+        index = "000000" + str(index)
+        image = Image.open(self.path.format(index[-6:]))
+        image = image.convert("RGB").resize(self.resolution)
+        image = self.img_transform(image)
+        sample = {"image":image}
+        return sample
 
 class Sprite3(Dataset):
-    def __init__(self,split = "train"):
+    def __init__(self,split = "train",resolution = (32,32)):
         super().__init__()
         assert split in ["train","test","validate"],print("Unknown dataset split type: {}".format(split))
     
@@ -26,7 +36,7 @@ class Sprite3(Dataset):
         self.img_transform = transforms.Compose(
             [transforms.ToTensor()]
         )
-
+        self.resolution = resolution
         self.questions = load_json("datasets/sprites3/train_sprite3_qa.json")
         
     def __len__(self): return len(self.files)
@@ -37,7 +47,7 @@ class Sprite3(Dataset):
         idx = np.random.choice(range(len(qa_sample)))
         
         image = Image.open(os.path.join(self.root_dir,self.split,"{}_{}.png".format(self.split,qa_sample[idx]["image"])))
-        image = image.convert("RGB").resize([64,64])
+        image = image.convert("RGB").resize(self.resolution)
         image = self.img_transform(image)
 
         

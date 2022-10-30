@@ -1,14 +1,17 @@
 import torch
 import torch.nn as nn
 
+from utils import *
+
 class Nerf(nn.Module):
     def __init__(self,config):
         super().__init__()
+        self.dim = config.space_dim
 
-    def forward(self,x):
+    def forward(self,z,x):
         return x
 
-    def __str__(self):return "neuro radience field"
+    def __str__(self):return "{} dim neuro radience field".format(self.dim)
 
 class PatchDecoder(nn.Module):
     def __init__(self,config):
