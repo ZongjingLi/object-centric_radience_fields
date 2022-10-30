@@ -80,7 +80,7 @@ class Projection(object):
         frus_world_coor = torch.matmul(cam2world, frus_cam_coor)  # Nx4x(WxHxD)
         frus_nss_coor = torch.matmul(self.world2nss, frus_world_coor)  # Nx4x(WxHxD)
         frus_nss_coor = frus_nss_coor.view(N, 4, W, H, D).permute([0, 4, 3, 2, 1])  # NxDxHxWx4
-        frus_nss_coor = frus_nss_coor[..., :3]  # NxDxHxWx3
+        frus_nss_coor = frus_nss_coor[..., :3]  # NxDxHxWx3 
         scale = H // self.render_size[0]
         if partitioned:
             frus_nss_coor_ = []
