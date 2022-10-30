@@ -20,6 +20,7 @@ train_config = train_parser.parse_args(args = [])
 print(train_parser)
 
 def train_render_field(model,train_config = train_config):
+    optimizer = torch.optim.Adam(model.parameters(), lr = 2e-4)
     if train_config.dataset == "sprite3":
         dataset = Sprite3("train")
     dataloader = DataLoader(dataset, batch_size = train_config.batch_size,shuffle = True)
@@ -31,13 +32,17 @@ def train_render_field(model,train_config = train_config):
 
             recon = im
 
-            working_loss = 0
-            total_loss += working_loss
-
             # visualize the training image and output if in vis-iter
             if itr % train_parser.visualize_itr == 0:
                 plt.figure("visualize render field")
                 plt.subplot(121);plt.cla();plt.imshow(im[0].permute([1,2,0]))
                 plt.subplot(122);plt.cla();plt.imshow(recon[0].permute([1,2,0]))
+        
+            working_loss = 0
+            working_loss.backward()
+            optimizer.step()
+            optimizer.zero_grad()
 
+            total_loss += working_loss # add the working_loss to the total loss
+        
         print("epoch:{} loss:{}".format(epoch,total_loss.detach()))
