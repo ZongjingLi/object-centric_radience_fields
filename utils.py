@@ -23,4 +23,5 @@ def AffineTransform(x,angle,scale,bias):
         [torch.cos(angle),-torch.sin(angle)],
         [torch.sin(angle),torch.cos(angle)],
     ])
-    return torch.matmul(rot_mat,scale * x) + bias
+
+    return torch.matmul(scale * x,rot_mat) + bias

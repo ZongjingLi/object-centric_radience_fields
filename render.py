@@ -9,16 +9,17 @@ class Nerf(nn.Module):
         self.dim  = config.space_dim
         self.latent_dim = config.concept_dim
         self.nerf = FCBlock(132,4,self.dim + self.latent_dim,config.nc)
-
-    def forward(self,z,x):return self.nerf(torch.cat([x,z],-1))
+        self.b = torch.randn([1,32,32,3])
+    def forward(self,z,x):return self.nerf(10 * torch.cat([x,z],-1)) * 0.5 + 0.5
 
     def __str__(self):return "{} dim neuro radience field".format(self.dim)
 
 class PatchDecoder(nn.Module):
     def __init__(self,config):
         super().__init__()
+        self.config= config
         latent_dim = config.latent_dim
-        self.spatial_feature = nn.Linear(132,2,latent_dim,latent_dim)
+        self.spatial_feature = FCBlock(132,2,latent_dim,latent_dim)
         # first decoder the spatial feature
         self.scale_decoder = FCBlock(132,3,latent_dim,1) # decode the raw scale
         self.angle_decoder = FCBlock(132,3,latent_dim,1) # decode raw angle
@@ -37,6 +38,7 @@ class PatchDecoder(nn.Module):
         angle = self.angle_decoder(spatial_latent) * torch.pi * 2
         shift = self.shift_decoder(spatial_latent) * 0.5 #[-1/2,1/2]
         # decode the entity in the box concept space
+        grid = make_grid(self.config.im_size)
         concept_latent = self.concept_decoder(z)
 
         return {"entity":concept_latent,
@@ -53,14 +55,25 @@ class OCRF(nn.Module):
     def __init__(self,config):
         # the object centric radience field
         super().__init__()
-        self.latent_encoder = SlotAttention()
+        self.latent_encoder = SlotAttention(config.slots,config.latent_dim,slot_dim = config.latent_dim)
         self.patch_decoder  = PatchDecoder(config)
         self.render_field   = Nerf(config)
 
     def forward(self,im):
         slot_features = self.latent_encoder(im)
+        print(slot_features.shape)
         patch_infos   = self.patch_decoder(slot_features)
-        return 
+
+        # decode the nerf fields components
+        grids = None
+        entities  = patch_infos["entity"]
+        scales    = patch_infos["scale"]
+        angles    = patch_infos["angle"]
+        shifts    = patch_infos["shift"]
+        print(entities.shape)
+        affine_grids = AffineTransform(grids,angles,scales,shifts)
+        components = self.render_field(affine_grids)
+        return components
 
 
 class SlotAttention(nn.Module):

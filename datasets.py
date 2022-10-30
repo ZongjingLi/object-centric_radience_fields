@@ -31,13 +31,13 @@ class Sprite3(Dataset):
         assert split in ["train","test","validate"],print("Unknown dataset split type: {}".format(split))
     
         self.split = split
-        self.root_dir = "datasets/sprites3"
+        self.root_dir = "/Users/melkor/Documents/GitHub/The-Machine/datasets/sprites3"
         self.files = os.listdir(os.path.join(self.root_dir,split))
         self.img_transform = transforms.Compose(
             [transforms.ToTensor()]
         )
         self.resolution = resolution
-        self.questions = load_json("datasets/sprites3/train_sprite3_qa.json")
+        self.questions = load_json("/Users/melkor/Documents/GitHub/The-Machine/datasets/sprites3/train_sprite3_qa.json")
         
     def __len__(self): return len(self.files)
 
