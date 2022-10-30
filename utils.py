@@ -3,6 +3,7 @@ import torch.nn as nn
 
 def patch_center(patch):
     # input patch shape [b,im_size,im_size,3]
+    if patch.shape[-1] != 1:patch = torch.max(patch,-1)[0].float()
     grid = make_grid(patch.shape[1]).unsqueeze(0)
     total_mass = patch.sum(1).sum(1)
     patch_dist = (patch * grid).sum(1).sum(1)
