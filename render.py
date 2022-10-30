@@ -22,3 +22,14 @@ class PatchDecoder(nn.Module):
 def PatchLoss(patch,location):
     # minimize the different between the center of patch and the predicted location
     return 0
+
+class OCRF(nn.Module):
+    def __init__(self,config):
+        # the object centric radience field
+        super().__init__()
+        self.latent_encoder = None
+        self.patch_decoder  = PatchDecoder(config)
+
+    def forward(self,im):
+        slot_features = self.latent_encoder(im)
+        return im
