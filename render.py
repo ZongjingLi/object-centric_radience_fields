@@ -22,3 +22,4 @@ class PatchDecoder(nn.Module):
 
 def PatchLoss(patch,location):
     # minimize the different between the center of patch and the predicted location
+    return 0

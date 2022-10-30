@@ -1,11 +1,20 @@
 import torch
 import torch.nn as nn
 
-def make_grid(size = 32):
-    return torch.meshgrid()
+def patch_center(patch):
+    # input patch shape [b,im_size,im_size,3]
+    grid = make_grid(patch.shape[1]).unsqueeze(0)
+    total_mass = patch.sum(1).sum(1)
+    patch_dist = (patch * grid).sum(1).sum(1)
+    return patch_dist/total_mass
 
-def render_component(grid,nerf):
-    return nerf(grid)
+def make_grid(im_size = 32):
+    x = torch.linspace(0, 1, im_size);y = torch.linspace(0, 1, im_size)
+    x_grid,y_grid = torch.meshgrid(x, y)
+    return torch.stack([x_grid,y_grid],-1)
+
+def render_component(grid,nerf,aff):
+    return nerf(aff(grid)) # use the affine transformation to change the grid frist then use the nerf to render the image
 
 def AffineTransform(x,angle,scale,bias):
     # R[t][sx] + bias
