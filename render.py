@@ -10,7 +10,7 @@ class Nerf(nn.Module):
         self.latent_dim = config.concept_dim
         self.nerf = FCBlock(132,4,self.dim + self.latent_dim,config.nc)
         self.b = torch.randn([1,32,32,3])
-    def forward(self,z,x):return self.nerf(10 * torch.cat([x,z],-1)) * 0.5 + 0.5
+    def forward(self,z,x):return self.nerf(30 * torch.cat([x,z],-1)) * 0.5 + 0.5
 
     def __str__(self):return "{} dim neuro radience field".format(self.dim)
 
