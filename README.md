@@ -9,4 +9,4 @@ arXiv link: [https://arxiv.org/abs/2107.07905](https://arxiv.org/abs/2107.07905)
 
 Project website: [https://kovenyu.com/uorf](https://kovenyu.com/uorf)
 
-![compose_concepts](diagram_compose_concepts.png)
+![compose_concepts](diagram_composite_concepts.png)
