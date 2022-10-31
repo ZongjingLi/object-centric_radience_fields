@@ -8,3 +8,5 @@ by [Hong-Xing Yu](https://kovenyu.com), [Leonidas J. Guibas](https://geometry.st
 arXiv link: [https://arxiv.org/abs/2107.07905](https://arxiv.org/abs/2107.07905)
 
 Project website: [https://kovenyu.com/uorf](https://kovenyu.com/uorf)
+
+![compose_concepts](diagram_compose_concepts.png)
