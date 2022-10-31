@@ -61,7 +61,7 @@ class OCRF(nn.Module):
         self.render_field   = Nerf(config)
 
     def forward(self,im):
-        slot_features = self.latent_encoder(im)
+        slot_features,_ = self.latent_encoder(im)
         print(slot_features.shape)
         patch_infos   = self.patch_decoder(slot_features)
 
