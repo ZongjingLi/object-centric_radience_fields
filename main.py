@@ -46,7 +46,7 @@ for i in range(1000):
 
     comp = nf(affine_grid,clat)
     plt.imshow(comp[0].detach());plt.pause(0.01);plt.cla()
-    t += 0.01
+    t += 0.05
     print(i)
 
 for i in range(1000):
@@ -55,6 +55,6 @@ for i in range(1000):
 
     comp = nf(affine_grid,clat)
     plt.imshow(comp[0].detach());plt.pause(0.01);plt.cla()
-    shift -= 0.05
-    s += 0.1
+    shift += 0.001
+    s += 0.01
     print(i)
