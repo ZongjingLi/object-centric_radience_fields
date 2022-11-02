@@ -36,8 +36,8 @@ def train_render_field(model,train_config = train_config):
         itr = 0
         for sample in dataloader:
             im = sample["image"];itr += 1 # [b,64,64,3]
-
-            results = im 
+            print(im.shape)
+            results = model(im)
             recon   = results["recon"] # calculate the model output [b,64,64,3]
             comps   = results["comps"] # calculate the components of reconstruction [b,n,64,64,3]
             cents   = results["cents"] # calculate the predict center of the patch  [b,n,3]
