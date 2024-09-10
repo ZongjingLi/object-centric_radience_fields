@@ -56,9 +56,10 @@ class OCRF(nn.Module):
     def __init__(self,config):
         # the object centric radience field
         super().__init__()
-        self.latent_encoder = SlotAttention(config.slots,config.latent_dim,slot_dim = config.latent_dim)
-        self.patch_decoder  = PatchDecoder(config)
-        self.render_field   = Nerf(config)
+        self.primary_encoder = None
+        self.latent_encoder  = SlotAttention(config.slots,config.latent_dim,slot_dim = config.latent_dim)
+        self.patch_decoder   = PatchDecoder(config)
+        self.render_field    = Nerf(config)
 
     def forward(self,im):
         slot_features,_ = self.latent_encoder(im)
@@ -71,7 +72,7 @@ class OCRF(nn.Module):
         scales    = patch_infos["scale"]
         angles    = patch_infos["angle"]
         shifts    = patch_infos["shift"]
-        print(entities.shape)
+  
         affine_grids = AffineTransform(grids,angles,scales,shifts)
         components = self.render_field(affine_grids)
         return components
